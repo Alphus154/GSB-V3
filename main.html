@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Generator</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #4c0606;
+        }
+
+        .sidebar {
+            position: fixed;
+            width: 220px;
+            height: 100vh;
+            background-color: #4c0606;
+            padding: 20px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .sidebar img {
+            width: 100px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .sidebar h2 {
+            margin-bottom: 20px;
+        }
+
+        .sidebar button {
+            margin: 5px 0;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            text-align: left;
+            width: 100%;
+            cursor: pointer;
+            padding: 8px 0;
+        }
+
+        .sidebar button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+
+        .sidebar-footer {
+            font-size: 12px;
+            color: #ccc;
+            text-align: center;
+            padding-top: 20px;
+            padding-bottom: 10px;
+        }
+
+        .content {
+            margin-left: 240px;
+            padding: 20px;
+            min-height: 100vh;
+            background-color: #4c0606;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content img {
+            width: 300px;
+            height: auto;
+        }
+
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        .submit-btn {
+            background-color: #800000;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .submit-btn:hover {
+            background-color: #a00000;
+        }
+
+        #bbcodeOutput {
+            background-color: #f4f4f4;
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-family: monospace;
+        }
+
+        .container {
+            display: none;
+        }
+
+        .command-team-container, .supervisor-team-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            padding: 20px;
+        }
+
+        .command-team-member, .supervisor-team-member {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 20px;
+        }
+
+        .command-team-member {
+            width: 350px;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .supervisor-team-member {
+            width: 200px;
+            height: 200px;
+            padding: 10px;
+        }
+
+        .team-member-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .team-member-details h3 {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .team-member-details p {
+            font-size: 14px;
+            color: #555;
+            margin: 5px 0;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <img src="https://i.imgur.com/1dhxhIu.png" alt="Logo">
+    <h2>Reports</h2>
+    <button onclick="showSection('emailSection')">Email</button>
+    <button onclick="showSection('dutyReportSection')">Duty Report</button>
+    <button onclick="showSection('incidentReportSection')">Incident Report</button>
+    <button onclick="showSection('arrestReportSection')">Arrest Report</button>
+    <button onclick="showSection('vipTransitReportSection')">VIP Transit Report</button>
+    <button onclick="showSection('warrantReportSection')">Warrant Report</button>
+
+    <h2>Sheets</h2>
+    <a href="https://docs.google.com/spreadsheets/d/1gAl7eTWVM_MADWw26LMwVwZ_cFbs6Km2jRwvfynBS3Q/edit?gid=0#gid=0" target="_blank">
+        <button>Paperwork Tracker</button>
+    </a>
+    <a href="https://docs.google.com/spreadsheets/d/1RYTXnq3Qj8gidOuuJOix4-EsslCuYSrUODSW3VM8RI8/edit?usp=sharing" target="_blank">
+        <button>Training Tracker</button>
+    </a>
+
+    <h2>Points of Contact</h2>
+    <button onclick="showSection('commandTeamSection')">Command Team</button>
+    <button onclick="showSection('supervisorTeamSection')">Supervisor Team</button>
+
+    <div class="sidebar-footer">
+        <small>Any issues contact Alphus on Discord</small>
+    </div>
+</div>
+
+<div class="content" id="content">
+    <img src="https://i.imgur.com/rXC9fsj.png" alt="Big Logo" id="mainLogo">
+
+    <!-- Email Section -->
+    <div class="container" id="emailSection">
+        <div class="card">
+        <h2 class="header">Email</h2>
+            <div class="form-group">
+                <label for="emailDate">Date</label>
+                <input type="text" id="emailDate" placeholder="e.g., 2nd, 3rd, 4th of January 2025">
+            </div>
+            <div class="form-group">
+                <label for="emailSubject">Subject</label>
+                <input type="text" id="emailSubject">
+            </div>
+            <div class="form-group">
+                <label for="theirName">Their Name</label>
+                <input type="text" id="theirName">
+            </div>
+            <div class="form-group">
+                <label for="yourName">Your Name</label>
+                <input type="text" id="yourName">
+            </div>
+            <div class="form-group">
+                <label for="yourRank">Your Rank</label>
+                <input type="text" id="yourRank">
+            </div>
+            <div class="form-group">
+                <label for="badgeNumber">Badge Number</label>
+                <input type="text" id="badgeNumber" placeholder="e.g., 123456">
+            </div>
+ <div class="form-group">
+                <label for="signatureImage">Signature Image</label>
+                <input type="text" id="signatureImage">
+            </div>
+
+            <div class="form-group">
+                <label for="emailText">Email Text</label>
+                <textarea id="emailText" rows="10" placeholder="Write your email here"></textarea>
+            </div>
+            <div class="form-group">
+                <button class="submit-btn" onclick="generateBBCode()">Submit and Copy to Clipboard</button>
+            </div>
+            <div class="form-group">
+                <label for="bbcodeOutput">BBCode Output:</label>
+                <textarea id="bbcodeOutput" rows="10" readonly></textarea>
+            </div>
+        </div>
+    </div>
+<style>
+  .card {
+    background-color: #000000;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 700px;
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  #emailSection .card {
+    width: 800px;
+    max-width: 90%;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  input, textarea {
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  .submit-btn {
+    background-color: #dbb165;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .submit-btn:hover {
+    background-color: #bb9752;
+  }
+
+  #bbcodeOutput {
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-family: monospace;
+  }
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: white; /* maroon */
+}
+
+</style>
+<script>
+    function generateBBCode() {
+        const emailDate = $('#emailDate').val();
+        const emailSubject = $('#emailSubject').val();
+        const theirName = $('#theirName').val();
+        const yourName = $('#yourName').val();
+        const yourRank = $('#yourRank').val();
+        const badgeNumber = $('#badgeNumber').val();
+        const signatureImage = $('#signatureImage').val();
+        const emailText = $('#emailText').val();
+
+        const bbcode = `
+[img]https://i.imgur.com/Lp6dMi4.png[/img]
+[divbox=#dbd3d3]
+[divbox=white]
+[img]https://i.imgur.com/1dhxhIu.png[/img][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
+[size=130]SAN ANDREAS STATE GOVERNMENT[/size]
+[size=115][color=#800000]Government Security Bureau[/color][/size][/b]
+[size=100][i] [font=Times New Roman]"Shielding Officials, Strengthening Government."[/font][/i][size=100]
+[size=115][i]${emailSubject}[/i][/size]
+[size=100]${emailDate}[/size]
+[/font][/right][/aligntable]
+[hr]
+[list=none]
+
+[b]${theirName},[/b]
+
+${emailText}
+
+[/list]
+[hr][/hr][list=none]
+
+Sincerely,
+ 
+[img]${signatureImage}[/img]
+[size=105]${yourName},[/size]
+[size=100][b] ${yourRank} | [color=#800000]Government Security Bureau[/color][/b][/size]
+[color=#B38F00][size=100][b]San Andreas State Government[/b][/size][/color]
+[size=85]Rockford Hills City Hall, Carcer Way, Los Santos.[/size]
+✉ [url=https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose&u=${badgeNumber}]${yourName}@sa.gov.us[/url]
+[/divbox]
+[divbox=white]
+[size=80][i][b]NOTICE OF CONFIDENTIALITY[/b]: The information contained within this electronic mail message is of an exceedingly confidential nature and may contain sensitive data intended solely for the aforementioned recipient(s). Should you receive this communication inadvertently or are not the intended addressee, we request that you immediately inform the sender and delete this correspondence from your system. The contents of this electronic mail message are strictly confidential and any unauthorized disclosure, reproduction, or distribution is strictly prohibited.[/i][/size]
+[/divbox]
+[/divbox]
+[img]https://i.imgur.com/Lp6dMi4.png[/img]`;
+
+        $('#bbcodeOutput').val(bbcode).select();
+        document.execCommand('copy');
+        alert("BBCode copied to clipboard!");
+    }
+
+    function showSection(sectionId) {
+        $('#mainLogo').hide();
+        $('.container').hide();
+        $('#' + sectionId).show();
+    }
+
+    $(document).ready(function() {
+        $('#mainLogo').show();
+    });
+</script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duty Report</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #4c0606;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: none;
+        }
+
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            width: 80%;
+            max-width: 700px;
+            margin: auto;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #4c0606;
+        }
+
+        input, textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        .header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .submit-btn {
+            background-color: #800000;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background-color: #a00000;
+        }
+
+        #shiftSummary {
+            height: 150px;
+        }
+
+        .spoiler-content {
+            display: none;
+            margin-top: 15px;
+        }
+
+        .spoiler-btn {
+            background-color: #800000;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .spoiler-btn:hover {
+            background-color: #a00000;
+        }
+
+        .spoiler-content input, .spoiler-content textarea {
+            margin-bottom: 10px;
+        }
+
+        .spoiler-content label {
+            color: white;
+        }
+
+    </style>
+</head>
+
+<div class="container" id="dutyReportSection">
+    <div class="card">
+        <h2 class="header">Duty Report</h2>
+
+        <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" placeholder="John Doe">
+        </div>
+
+        <div class="form-group">
+            <label for="rank">Rank</label>
+            <input type="text" id="rank" placeholder="Agent II">
+        </div>
+
+        <div class="form-group">
+            <label for="shiftStart">Shift Start</label>
+            <input type="text" id="shiftStart" placeholder="DD/MMM/YYYY XX:XX">
+        </div>
+
+        <div class="form-group">
+            <label for="shiftEnd">Shift End</label>
+            <input type="text" id="shiftEnd" placeholder="DD/MMM/YYYY XX:XX">
+        </div>
+
+        <div class="form-group">
+            <label for="shiftSummary">Shift Summary</label>
+            <textarea id="shiftSummary" placeholder="Enter your shift summary, include lots of detail!!" rows="5"></textarea>
+        </div>
+
+        <!-- Spoilers -->
+        <div class="form-group">
+            <button class="spoiler-btn" onclick="toggleSpoiler(1)">Incident 1</button>
+            <div class="spoiler-content" id="spoiler1">
+                <div class="form-group">
+                    <label for="situationNarrative1">Situation Narrative</label>
+                    <textarea id="situationNarrative1" rows="4" placeholder="Describe the situation..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="dateTime1">Date & Time</label>
+                    <input type="text" id="dateTime1" placeholder="Enter the date and time">
+                </div>
+
+                <div class="form-group">
+                    <label for="linkToPaperwork1">Link to Paperwork</label>
+                    <input type="text" id="linkToPaperwork1" placeholder="Paste the link to the paperwork">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button class="spoiler-btn" onclick="toggleSpoiler(2)">Incident 2</button>
+            <div class="spoiler-content" id="spoiler2">
+                <div class="form-group">
+                    <label for="situationNarrative2">Situation Narrative</label>
+                    <textarea id="situationNarrative2" rows="4" placeholder="Describe the situation..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="dateTime2">Date & Time</label>
+                    <input type="text" id="dateTime2" placeholder="Enter the date and time">
+                </div>
+
+                <div class="form-group">
+                    <label for="linkToPaperwork2">Link to Paperwork</label>
+                    <input type="text" id="linkToPaperwork2" placeholder="Paste the link to the paperwork">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button class="spoiler-btn" onclick="toggleSpoiler(3)">Incident 3</button>
+            <div class="spoiler-content" id="spoiler3">
+                <div class="form-group">
+                    <label for="situationNarrative3">Situation Narrative</label>
+                    <textarea id="situationNarrative3" rows="4" placeholder="Describe the situation..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="dateTime3">Date & Time</label>
+                    <input type="text" id="dateTime3" placeholder="Enter the date and time">
+                </div>
+
+                <div class="form-group">
+                    <label for="linkToPaperwork3">Link to Paperwork</label>
+                    <input type="text" id="linkToPaperwork3" placeholder="Paste the link to the paperwork">
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit and BBCode Output -->
+        <div class="form-group">
+            <button class="submit-btn" onclick="generateDutyBBCode()">Submit and Copy to Clipboard</button>
+        </div>
+
+        <div class="form-group">
+            <label for="bbcodeOutput2">BBCode Output:</label>
+            <textarea id="bbcodeOutput2" rows="10" readonly></textarea>
+        </div>
+
+    </div>
+</div>
+<style>
+  .card {
+    background-color: #000000;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 700px;
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  #dutyReportSection .card {
+    width: 800px;
+    max-width: 90%;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  input, textarea {
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  .submit-btn {
+    background-color: #dbb165;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .submit-btn:hover {
+    background-color: #bb9752;
+  }
+
+  #bbcodeOutput {
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-family: monospace;
+  }
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: white; /* maroon */
+}
+
+</style>
+
+
+<script>
+    function toggleSpoiler(num) {
+        const spoilerContent = document.getElementById('spoiler' + num);
+        spoilerContent.style.display = (spoilerContent.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function generateDutyBBCode() {
+        const fullName = $('#fullName').val();
+        const rank = $('#rank').val();
+        const shiftStart = $('#shiftStart').val();
+        const shiftEnd = $('#shiftEnd').val();
+        const shiftSummary = $('#shiftSummary').val();
+
+        const situationNarrative1 = $('#situationNarrative1').val();
+        const dateTime1 = $('#dateTime1').val();
+        const linkToPaperwork1 = $('#linkToPaperwork1').val();
+
+        const situationNarrative2 = $('#situationNarrative2').val();
+        const dateTime2 = $('#dateTime2').val();
+        const linkToPaperwork2 = $('#linkToPaperwork2').val();
+
+        const situationNarrative3 = $('#situationNarrative3').val();
+        const dateTime3 = $('#dateTime3').val();
+        const linkToPaperwork3 = $('#linkToPaperwork3').val();
+
+        const bbcode = `
+[img]https://i.imgur.com/KluN5gs.png[/img]
+[divbox=#dbd3d3]
+[divbox=#4c0606][b][color=white]Agent Details[/color][/b][/divbox]
+[divbox=white]
+[b]Full Name:[/b] ${fullName}
+[b]Rank:[/b] ${rank}
+[/divbox]
+[divbox=#4c0606][b][color=white]Shift Details[/color][/b][/divbox]
+[divbox=white]
+[b]Shift Start:[/b] ${shiftStart}
+[b]Shift End:[/b] ${shiftEnd}
+[b]Shift Summary:[/b] ${shiftSummary}
+[/divbox]
+[divbox=#4c0606][b][color=white]Incidents[/color][/b][/divbox]
+[divbox=white]
+[spoiler=Incident 1]
+[b]Situation Narrative:[/b] ${situationNarrative1}
+[b]Time of Event:[/b] ${dateTime1}
+[b]Link to Report:[/b] ${linkToPaperwork1}
+[/spoiler]
+[spoiler=Incident 2]
+[b]Situation Narrative:[/b] ${situationNarrative2}
+[b]Time of Event:[/b] ${dateTime2}
+[b]Link to Report:[/b] ${linkToPaperwork2}
+[/spoiler]
+[spoiler=Incident 3]
+[b]Situation Narrative:[/b] ${situationNarrative3}
+[b]Time of Event:[/b] ${dateTime3}
+[b]Link to Report:[/b] ${linkToPaperwork3}
+[/spoiler]
+[/divbox]
+[/divbox]`;
+
+        // Set and copy the BBCode
+        const output = document.getElementById('bbcodeOutput2');
+        output.value = bbcode;
+        output.select();
+        document.execCommand('copy');
+
+        alert("BBCode copied to clipboard!");
+    }
+</script>
+
+<div class="container" id="incidentReportSection">
+        <div class="card">
+        <h2 class="header">Incident Report</h2>
+        <div class="form-group">
+            <label for="incidentDate">Incident Date</label>
+            <input type="text" id="incidentDate" placeholder="DD/MMM/YYYY">
+        </div>
+        <div class="form-group">
+            <label for="incidentDuration">Incident Date</label>
+            <input type="text" id="incidentDuration" placeholder="0h 0m">
+        </div>
+        <div class="form-group">
+            <label for="suspectName">Suspects Full Name</label>
+            <input type="text" id="suspectName" placeholder="John Doe">
+        </div>
+        <div class="form-group">
+            <label for="suspectNumber">Suspects Phone Number</label>
+            <input type="text" id="suspectNumber">
+        </div>
+<div class="form-group">
+    <label for="peopleInvolvedInput">Agents/Officers Involved</label>
+    <input type="text" id="peopleInvolvedInput" placeholder="Enter name...">
+<div style="margin-top: 10px;">
+    <button onclick="addAgent()" style="background-color: green; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;">Add</button>
+    <button onclick="removeAgent()" style="background-color: red; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-left: 5px;">Remove</button>
+</div>
+   <ul id="peopleInvolvedList" style="margin-top: 10px; list-style-type: disc; padding-left: 20px; color: white;"></ul>
+</div>
+<div class="form-group">
+    <label for="incidentSummary">Incident Summary</label>
+    <textarea id="incidentSummary" rows="5"></textarea>
+</div>        <div class="form-group">
+            <label for="proofOfRP">Proof of RP</label>
+            <input type="text" id="proofOfRP" placeholder="MANDATORY">
+        </div>
+        <div class="form-group">
+            <label for="evidence">Evidence</label>
+            <input type="text" id="evidence"placeholder="Video/Image">
+        </div>
+<div class="form-group">
+    <label>Incident Outcome</label>
+    <div>
+       <button onclick="setOutcome('Successful', this)" style="background-color: green; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;">Successful</button>
+       <button onclick="setOutcome('Unsuccessful', this)" style="background-color: red; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;">Unsuccessful</button>
+    </div>
+    <input type="hidden" id="incidentOutcome">
+</div>
+
+ <div class="form-group">
+           <button class="submit-btn" onclick="generateBBCode()">Submit and Copy to Clipboard</button>
+        </div>
+
+        <div class="form-group">
+            <label for="bbcodeOutput3">BBCode Output:</label>
+            <textarea id="bbcodeOutput3" rows="10" readonly></textarea>
+        </div>
+    </div>
+</div>
+<script>
+    const agents = [];
+
+    function addAgent() {
+        const input = document.getElementById('peopleInvolvedInput');
+        const name = input.value.trim();
+
+        if (name) {
+            agents.push(name);
+            updateAgentList();
+            input.value = '';
+        }
+    }
+
+    function removeAgent() {
+        if (agents.length > 0) {
+            agents.pop();
+            updateAgentList();
+        }
+    }
+
+    function updateAgentList() {
+        const list = document.getElementById('peopleInvolvedList');
+        list.innerHTML = '';
+
+        agents.forEach(agent => {
+            const li = document.createElement('li');
+            li.textContent = agent;
+            list.appendChild(li);
+        });
+    }
+
+    function getAgentListString() {
+        return agents.join(', ');
+    }
+</script>
+<script>
+function setOutcome(outcome, button) {
+    const buttons = button.parentElement.querySelectorAll('button');
+
+    // Reset all buttons' background colors
+    buttons.forEach(btn => {
+        if (btn.textContent === 'Successful') {
+            btn.style.backgroundColor = 'green';
+        } else if (btn.textContent === 'Unsuccessful') {
+            btn.style.backgroundColor = 'red';
+        }
+    });
+
+    // Highlight the clicked one with a slightly brighter color
+    if (outcome === 'Successful') {
+        button.style.backgroundColor = '#28a745'; // bright green
+        document.getElementById('incidentOutcome').value = "[highlight=green][b]Successful[/b][/highlight]";
+    } else {
+        button.style.backgroundColor = '#dc3545'; // bright red
+        document.getElementById('incidentOutcome').value = "[highlight=red][b]Unsuccessful[/b][/highlight]";
+    }
+}
+</script>
+
+<style>
+  .card {
+    background-color: #000000;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 700px;
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  #incidentReportSection .card {
+    width: 800px;
+    max-width: 90%;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  input, textarea {
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  .submit-btn {
+    background-color: #dbb165;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .submit-btn:hover {
+    background-color: #bb9752;
+  }
+
+  #bbcodeOutput {
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-family: monospace;
+  }
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: white; /* maroon */
+}
+
+</style>
+<script>
+function generateBBCode() {
+    const incidentDate = document.getElementById('incidentDate').value;
+    const incidentDuration = document.getElementById('incidentDuration').value;
+    const suspectName = document.getElementById('suspectName').value;
+    const suspectNumber = document.getElementById('suspectNumber').value;
+    const incidentSummary = document.getElementById('incidentSummary').value;
+    const proofOfRP = document.getElementById('proofOfRP').value;
+    const evidence = document.getElementById('evidence').value;
+    const incidentOutcome = document.getElementById('incidentOutcome').value;
+
+    // Format agents list
+    let agentListBBCode = '';
+    agents.forEach(agent => {
+        agentListBBCode += `[*]${agent}\n`;
+    });
+
+    // Format outcome with color
+    let outcomeColor = (incidentOutcome === 'Successful') ? 'green' : 'red';
+    let outcomeLine = `[color=${outcomeColor}]${incidentOutcome}[/color]`;
+
+    const bbcode = `
+[img]https://i.imgur.com/1IO7nGN.png[/img]
+[divbox=#dbd3d3]
+[divbox=#4c0606][b][color=white]Details[/color][/b][/divbox]
+[divbox=white]
+[b]Date:[/b] ${incidentDate}
+[b]Incident Duration:[/b] ${incidentDuration}
+[/divbox]
+[divbox=#4c0606][b][color=white]Suspect Details[/color][/b][/divbox]
+[divbox=white]
+[b]Full Name(s) If applicable:[/b] ${suspectName}
+[b]Phone Number(s) If applicable:[/b] ${suspectNumber}
+[/divbox]
+[divbox=#4c0606][b][color=white]Agents/Officers Involved[/color][/b][/divbox]
+[divbox=white]
+[b]Agents/Officers Involved:[/b]
+[list]
+${agentListBBCode}[/list]
+[b]Incident Summary:[/b] ${incidentSummary}
+[/divbox]
+[divbox=#4c0606][b][color=white]Evidence[/color][/b][/divbox]
+[divbox=white]
+[b]Provide your bodycam footage if possible below((screenshots or even short videos)):[/b]
+[Spoiler=Bodycam Evidence]
+[list][*][ooc]${proofOfRP}[/ooc]
+[*]${evidence}
+[/list]
+[/Spoiler]
+
+Incident Outcome: ${incidentOutcome}
+[/divbox]
+[/divbox]
+[img]https://i.imgur.com/Fttvrwf.png[/img]`;
+
+    document.getElementById('bbcodeOutput3').value = bbcode;
+    document.getElementById('bbcodeOutput3').select();
+    document.execCommand('copy');
+    alert("BBCode copied to clipboard!");
+}
+</script>
+
+<div class="container" id="arrestReportSection">
+        <div class="card">
+        <h2 class="header">Arrest Report</h2>
+    
+   <div class="form-group">
+            <label for="suspectNameArrest">Suspect Name</label>
+            <input type="text" id="suspectNameArrest">
+        </div>
+       <div class="form-group">
+            <label for="suspectNumberArrest">Suspect Number</label>
+            <input type="text" id="suspectNumberArrest">
+        </div>
+        <div class="form-group">
+            <label for="mugshot">Mugshot</label>
+            <input type="text" id="mugshot">
+        </div>
+        <div class="form-group">
+            <label for="arrestTime">Arrest Date & Time</label>
+            <input type="text" id="arrestTime" placeholder="DD/MMM/YYYY XX:XX">
+        </div>
+        <div class="form-group">
+            <label for="suspectLicense">Suspect License</label>
+            <input type="text" id="suspectLicense">
+        </div>
+<div class="form-group">
+  <label for="chargesInput">Charges</label>
+  <input type="text" id="chargesInput" placeholder="GF02 - Robbery">
+  <div style="margin-top: 10px;">
+    <button onclick="addCharge()" style="background-color: green; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;">Add</button>
+    <button onclick="removeCharge()" style="background-color: red; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-left: 5px;">Remove</button>
+  </div>
+  <ul id="chargesList" style="margin-top: 10px; list-style-type: disc; padding-left: 20px; color: white;"></ul>
+</div>
+<div class="form-group">
+  <label for="peopleInput">Agents/Officers Involved</label>
+  <input type="text" id="peopleInput" placeholder="GF02 - Robbery">
+  <div style="margin-top: 10px;">
+    <button onclick="addPerson()" style="background-color: green; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;">Add</button>
+    <button onclick="removePerson()" style="background-color: red; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-left: 5px;">Remove</button>
+  </div>
+  <ul id="peopleList" style="margin-top: 10px; list-style-type: disc; padding-left: 20px; color: white;"></ul>
+</div>
+<div class="form-group">
+  <label for="arrestSummary">Arrest Summary</label>
+  <textarea id="arrestSummary" rows="5" style="resize: vertical;"></textarea>
+</div>
+<div class="form-group">
+  <label for="illegalInput">Illegal Possessions</label>
+  <input type="text" id="illegalInput" placeholder="1x Pistol.50">
+  <div style="margin-top: 10px;">
+    <button onclick="addIllegalItem()" style="background-color: green; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;">Add</button>
+    <button onclick="removeIllegalItem()" style="background-color: red; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-left: 5px;">Remove</button>
+  </div>
+  <ul id="illegalList" style="margin-top: 10px; list-style-type: disc; padding-left: 20px; color: white;"></ul>
+</div>
+<div class="form-group">
+  <label for="legalInput">Legal Possessions</label>
+  <input type="text" id="legalInput" placeholder="1x Radio">
+  <div style="margin-top: 10px;">
+    <button onclick="addLegalItem()" style="background-color: green; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;">Add</button>
+    <button onclick="removeLegalItem()" style="background-color: red; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-left: 5px;">Remove</button>
+  </div>
+  <ul id="legalList" style="margin-top: 10px; list-style-type: disc; padding-left: 20px; color: white;"></ul>
+</div>
+        <div class="form-group">
+            <label for="possesions">Photograph of Possesions</label>
+            <input type="text" id="possesions" placeholder="MANDATORY">
+        </div>
+        <div class="form-group">
+            <label for="proofRP">Proof of RP</label>
+            <input type="text" id="proofRP"placeholder="MANDATORY">
+        </div>
+<div class="form-group">
+  <label for="footageInput">Bodycam Footage</label>
+  <input type="text" id="footageInput" placeholder="MANDATORY">
+  <div style="margin-top: 10px;">
+    <button onclick="addFootage()" style="background-color: green; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;">Add</button>
+    <button onclick="removeFootage()" style="background-color: red; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-left: 5px;">Remove</button>
+  </div>
+  <ul id="footageList" style="margin-top: 10px; list-style-type: disc; padding-left: 20px; color: white;"></ul>
+</div>
+        <div class="form-group">
+            <button class="submit-btn" onclick="generateArrestBBCode()">Submit and Copy to Clipboard</button>
+        </div>
+
+        <div class="form-group">
+            <label for="bbcodeOutput4">BBCode Output:</label>
+            <textarea id="bbcodeOutput4" rows="10" readonly></textarea>
+        </div>
+
+    </div>
+</div>
+
+<script>
+  const charges = [];
+
+  function addCharge() {
+    const input = document.getElementById('chargesInput');
+    const value = input.value.trim();
+    if (value) {
+      charges.push(value);
+      updateChargesList();
+      input.value = '';
+    }
+  }
+
+  function removeCharge() {
+    charges.pop();
+    updateChargesList();
+  }
+
+  function updateChargesList() {
+    const list = document.getElementById('chargesList');
+    list.innerHTML = '';
+    charges.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      list.appendChild(li);
+    });
+  }
+</script>
+<script>
+  const people = [];
+
+  function addPerson() {
+    const input = document.getElementById('peopleInput');
+    const value = input.value.trim();
+    if (value) {
+      people.push(value);
+      updatePeopleList();
+      input.value = '';
+    }
+  }
+
+  function removePerson() {
+    people.pop();
+    updatePeopleList();
+  }
+
+  function updatePeopleList() {
+    const list = document.getElementById('peopleList');
+    list.innerHTML = '';
+    people.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      list.appendChild(li);
+    });
+  }
+</script>
+<script>
+  const legalItems = [];
+
+  function addLegalItem() {
+    const input = document.getElementById('legalInput');
+    const value = input.value.trim();
+    if (value) {
+      legalItems.push(value);
+      updateLegalList();
+      input.value = '';
+    }
+  }
+
+  function removeLegalItem() {
+    legalItems.pop();
+    updateLegalList();
+  }
+
+  function updateLegalList() {
+    const list = document.getElementById('legalList');
+    list.innerHTML = '';
+    legalItems.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      list.appendChild(li);
+    });
+  }
+</script>
+<script>
+  const illegalItems = [];
+
+  function addIllegalItem() {
+    const input = document.getElementById('illegalInput');
+    const value = input.value.trim();
+    if (value) {
+      illegalItems.push(value);
+      updateIllegalList();
+      input.value = '';
+    }
+  }
+
+  function removeIllegalItem() {
+    illegalItems.pop();
+    updateIllegalList();
+  }
+
+  function updateIllegalList() {
+    const list = document.getElementById('illegalList');
+    list.innerHTML = '';
+    illegalItems.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      list.appendChild(li);
+    });
+  }
+</script>
+<script>
+  const bodycamFootage = [];
+
+  function addFootage() {
+    const input = document.getElementById('footageInput');
+    const value = input.value.trim();
+    if (value) {
+      bodycamFootage.push(value);
+      updateFootageList();
+      input.value = '';
+    }
+  }
+
+  function removeFootage() {
+    bodycamFootage.pop();
+    updateFootageList();
+  }
+
+  function updateFootageList() {
+    const list = document.getElementById('footageList');
+    list.innerHTML = '';
+    bodycamFootage.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      list.appendChild(li);
+    });
+  }
+</script>
+<style>
+  .card {
+    background-color: #000000;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 700px;
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  #arrestReportSection .card {
+    width: 800px;
+    max-width: 90%;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  input, textarea {
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  .submit-btn {
+    background-color: #dbb165;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .submit-btn:hover {
+    background-color: #bb9752;
+  }
+
+  #bbcodeOutput {
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-family: monospace;
+  }
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: white; /* maroon */
+}
+
+</style>
+<script>
+function generateArrestBBCode() {
+    const suspectNameArrest = document.getElementById('suspectNameArrest').value;
+    const suspectNumberArrest = document.getElementById('suspectNumberArrest').value;
+    const mugshot = document.getElementById('mugshot').value;
+    const arrestTime = document.getElementById('arrestTime').value;
+    const suspectLicense = document.getElementById('suspectLicense').value;
+    const arrestSummary = document.getElementById('arrestSummary').value;
+    const possesions = document.getElementById('possesions').value;
+    const proofRP = document.getElementById('proofRP').value;
+
+    // Prepare formatted lists
+    const formattedCharges = charges.map(c => `[*]${c}`).join('\n');
+    const formattedPeople = people.map(p => `[*]${p}`).join('\n');
+    const formattedIllegal = illegalItems.map(i => `[b] Exhibit:[/b] ${i}`).join('\n');
+    const formattedLegal = legalItems.map(l => `[b] Exhibit:[/b] ${l}`).join('\n');
+    const formattedFootage = bodycamFootage.map(f => `[*]${f}`).join('\n');
+
+    const bbcode = `
+[img]https://i.imgur.com/aDC580W.png[/img]
+[divbox=#dbd3d3]
+[divbox=#4c0606][b][color=white]Suspect Details[/color][/b][/divbox]
+[divbox=white]
+[float=right][fimg=200,185]${mugshot}[/fimg][/float]
+
+[b]Full Name:[/b] ${suspectNameArrest}
+[b]Phone Number:[/b] ${suspectNumberArrest}
+[b]Time of Arrest:[/b] ${arrestTime}
+[b]Licenses:[/b] 
+[spoiler]
+[img]${suspectLicense}[/img]
+[/spoiler]
+
+[b]Charges:[/b]
+[i][size=85]Example: Attempted SF02 - Murder of a Government Employee[/size][/i]
+[list]
+${formattedCharges}
+[/list]
+[/divbox]
+
+[divbox=#4c0606][b][color=white]Incident Details[/color][/b][/divbox]
+[divbox=white]
+[b]Agents/Officers Involved:[/b]
+[i][size=85]Example: Agent III John Doe[/size][/i]
+[list]
+${formattedPeople}
+[/list]
+
+[b]Summary:[/b] ${arrestSummary}
+[/divbox]
+
+[divbox=#4c0606][b][color=white]Evidence Details[/color][/b][/divbox]
+[divbox=white]
+[u]Illegal Possessions:[/u]
+${formattedIllegal}
+
+[u]Legal Possessions:[/u]
+${formattedLegal}
+
+[center]
+[spoiler=Photograph of Possessions (REQUIRED)]
+[img]${possesions}[/img]
+[/spoiler]
+[/center]
+
+[b]Bodycam Footage:[/b]
+[spoiler=Bodycam Footage]
+[list]
+[*]${proofRP}
+${formattedFootage}
+[/list]
+[/spoiler]
+[/divbox]
+[/divbox]
+[img]https://i.imgur.com/Fttvrwf.png[/img]
+`;
+
+    document.getElementById('bbcodeOutput4').value = bbcode;
+    navigator.clipboard.writeText(bbcode);
+    alert("BBCode copied to clipboard!");
+}
+</script>
+
+<div class="container" id="vipTransitReportSection">
+        <div class="card">
+        <h2 class="header">VIP Transit Report</h2>
+ 
+  <div class="form-group">
+            <label for="agentCharge">Agent In Charge</label>
+            <input type="text" id="agentCharge"placeholder="Senior Agent John Doe">
+        </div>
+<div class="form-group">
+  <label for="vipAgentInvolved">Agents Involved</label>
+  <input type="text" id="vipAgentInvolved" placeholder="Agent II John Doe">
+  <div style="margin-top: 10px;">
+    <button onclick="addVipAgent()" style="background-color: green; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;">Add</button>
+    <button onclick="removeVipAgent()" style="background-color: red; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-left: 5px;">Remove</button>
+  </div>
+  <!-- This must exactly match the ID in updateList() -->
+  <ul id="vipAgentList" style="margin-top: 10px; color: white;"></ul>
+</div>
+   <div class="form-group">
+            <label for="threatLevel">Level of Threat</label>
+            <input type="text" id="threatLevel"placeholder="None/Low/High">
+        </div>
+   <div class="form-group">
+            <label for="vipShiftStart">Date & Time</label>
+            <input type="text" id="vipShiftStart"placeholder="DD/MMM/YYYY XX:XX">
+        </div>
+  <div class="form-group">
+  <label for="weaponsUsed">Weaponry Used/Carried</label>
+  <input type="text" id="weaponsUsed" placeholder="Handguns/Tazer/Heavy Weapons">
+  <div style="margin-top: 10px;">
+    <button onclick="addweaponsUsed()" style="background-color: green; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;">Add</button>
+    <button onclick="removeweaponsUsed()" style="background-color: red; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-left: 5px;">Remove</button>
+  </div>
+ <ul id="weaponsUsedList" style="margin-top: 10px; color: white;"></ul>
+</div>
+   <div class="form-group">
+            <label for="comments">Comments</label>
+            <input type="text" id="comments"placeholder="If none leave N/A">
+        </div>
+ <div class="form-group">
+  <label for="vipName">Name of VIP(s)</label>
+  <input type="text" id="vipName" placeholder="Governor Emily Whitehorse">
+  <div style="margin-top: 10px;">
+    <button onclick="addvipName()" style="background-color: green; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;">Add</button>
+    <button onclick="removevipName()" style="background-color: red; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-left: 5px;">Remove</button>
+  </div>
+ <ul id="vipNameList" style="margin-top: 10px; color: white;"></ul>
+</div>
+   <div class="form-group">
+            <label for="requestService">Requested Service</label>
+            <input type="text" id="requestService"placeholder="Escort, Protection etc">
+        </div>
+ <div class="form-group">
+  <label for="destination">Destination(s)</label>
+  <input type="text" id="destination">
+  <div style="margin-top: 10px;">
+    <button onclick="adddestination()" style="background-color: green; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;">Add</button>
+    <button onclick="removedestination()" style="background-color: red; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-left: 5px;">Remove</button>
+  </div>
+ <ul id="destinationList" style="margin-top: 10px; color: white;"></ul>
+</div>
+ <div class="form-group">
+  <label for="vehicleUsed">Vehicle(s) Used</label>
+  <input type="text" id="vehicleUsed">
+  <div style="margin-top: 10px;">
+    <button onclick="addvehicleUsed()" style="background-color: green; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;">Add</button>
+    <button onclick="removevehicleUsed()" style="background-color: red; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-left: 5px;">Remove</button>
+  </div>
+ <ul id="vehicleUsedList" style="margin-top: 10px; color: white;"></ul>
+</div>
+   <div class="form-group">
+            <label for="forceUse">Use of Force</label>
+            <input type="text" id="forceUse"placeholder="Verbal, Lethal etc">
+        </div>
+<div class="form-group">
+  <label for="vipSummary">Mission Summary</label>
+  <textarea id="vipSummary" rows="6" style="resize: vertical;"></textarea>
+</div>
+        <div class="form-group">
+            <button class="submit-btn" onclick="generateTransitBBCode()">Submit and Copy to Clipboard</button>
+        </div>
+
+        <div class="form-group">
+            <label for="bbcodeOutput5">BBCode Output:</label>
+            <textarea id="bbcodeOutput5" rows="10" readonly></textarea>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+  // Create arrays to store values
+  const vipAgentsInvolved = [];
+  const weaponsUsed = [];
+  const vipNames = [];
+  const destinations = [];
+  const vehiclesUsed = [];
+
+  // Utility function to update a list in the DOM
+function updateList(array, listId) {
+  const list = document.getElementById(listId);
+  list.innerHTML = '';
+  array.forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = item;
+    list.appendChild(li);
+  });
+}
+
+function addVipAgent() {
+  const input = document.getElementById('vipAgentInvolved');
+  const name = input.value.trim();
+  if (name) {
+    vipAgentsInvolved.push(name);
+    updateList(vipAgentsInvolved, 'vipAgentList');
+    input.value = '';
+  }
+}
+
+function removeVipAgent() {
+  vipAgentsInvolved.pop();
+  updateList(vipAgentsInvolved, 'vipAgentList');
+}
+  // Weapons Used
+  function addweaponsUsed() {
+    const input = document.getElementById('weaponsUsed');
+    const name = input.value.trim();
+    if (name) {
+      weaponsUsed.push(name);
+      updateList(weaponsUsed, 'weaponsUsedList');
+      input.value = '';
+    }
+  }
+
+  function removeweaponsUsed() {
+    weaponsUsed.pop();
+    updateList(weaponsUsed, 'weaponsUsedList');
+  }
+
+  // VIP Names
+  function addvipName() {
+    const input = document.getElementById('vipName');
+    const name = input.value.trim();
+    if (name) {
+      vipNames.push(name);
+      updateList(vipNames, 'vipNameList');
+      input.value = '';
+    }
+  }
+
+  function removevipName() {
+    vipNames.pop();
+    updateList(vipNames, 'vipNameList');
+  }
+
+  // Destinations
+  function adddestination() {
+    const input = document.getElementById('destination');
+    const name = input.value.trim();
+    if (name) {
+      destinations.push(name);
+      updateList(destinations, 'destinationList');
+      input.value = '';
+    }
+  }
+
+  function removedestination() {
+    destinations.pop();
+    updateList(destinations, 'destinationList');
+  }
+
+  // Vehicles Used
+  function addvehicleUsed() {
+    const input = document.getElementById('vehicleUsed');
+    const name = input.value.trim();
+    if (name) {
+      vehiclesUsed.push(name);
+      updateList(vehiclesUsed, 'vehicleUsedList');
+      input.value = '';
+    }
+  }
+
+  function removevehicleUsed() {
+    vehiclesUsed.pop();
+    updateList(vehiclesUsed, 'vehicleUsedList');
+  }
+
+  // Optional: Functions to return lists with [*] prefix for BBCode use
+  function getListWithBBCodeItems(array) {
+    return array.map(item => `[*] ${item}`).join('\n');
+  }
+</script>
+
+
+<style>
+  .card {
+    background-color: #000000;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 700px;
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  #vipTransitReportSection .card {
+    width: 800px;
+    max-width: 90%;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  input, textarea {
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  .submit-btn {
+    background-color: #dbb165;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .submit-btn:hover {
+    background-color: #bb9752;
+  }
+
+  #bbcodeOutput {
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-family: monospace;
+  }
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: white; /* maroon */
+}
+
+</style>
+
+<script>
+  function generateTransitBBCode() {
+    const agentCharge = $('#agentCharge').val();
+    const threatLevel = $('#threatLevel').val();
+    const vipShiftStart = $('#vipShiftStart').val();
+    const comments = $('#comments').val();
+    const requestService = $('#requestService').val();
+    const forceUse = $('#forceUse').val();
+    const vipSummary = $('#vipSummary').val();
+
+    // Convert arrays to BBCode lists
+    const vipAgentsBBCode = getListWithBBCodeItems(vipAgentsInvolved);
+    const weaponsBBCode = getListWithBBCodeItems(weaponsUsed);
+    const vipNamesBBCode = getListWithBBCodeItems(vipNames);
+    const destinationsBBCode = getListWithBBCodeItems(destinations);
+    const vehiclesBBCode = getListWithBBCodeItems(vehiclesUsed);
+
+    const bbcode = `
+[img]https://i.imgur.com/bwHuU5J.png[/img]
+[divbox=#dbd3d3]
+[divbox=#4c0606][b][color=white]Agent details[/color][/b][/divbox]
+[divbox=white]
+[b]Agent in charge:[/b] ${agentCharge}
+[b]Agents included:[/b] 
+[list]
+${vipAgentsBBCode}
+[/list]
+[b]Level of threat? (Low/High/None):[/b] ${threatLevel}
+[b]Date & Time:[/b] ${vipShiftStart}
+[b]Weaponry (Handguns/Tazer/Heavy weapons):[/b] 
+[list]
+${weaponsBBCode}
+[/list]
+[b]Comments:[/b] ${comments}
+[/divbox]
+[divbox=#4c0606][b][color=white]VIP details[/color][/b][/divbox]
+[divbox=white]
+[b]Name of VIP's:[/b] 
+[list]
+${vipNamesBBCode}
+[/list]
+[b]Requested services (What was requested from the VIP?):[/b] ${requestService}
+[/divbox]
+[divbox=#4c0606][b][color=white]Mission details[/color][/b][/divbox]
+[divbox=white]
+[b]Destination(s) (From start location to every official stop and end location):[/b] 
+[list]
+${destinationsBBCode}
+[/list]
+[b]Vehicle(s) used:[/b] 
+[list]
+${vehiclesBBCode}
+[/list]
+[b]Use of force:[/b] ${forceUse}
+[b]Mission summary:[/b] ${vipSummary}
+Incident report: 
+[i]If an incident has happened during the VIP transit log, an incident report should ALSO be filed. If the mission finished without any issues, an incident report is not required.[/i]
+[/divbox]
+[/divbox]
+[img]https://i.imgur.com/Fttvrwf.png[/img]`;
+
+    document.getElementById('bbcodeOutput5').value = bbcode;
+    navigator.clipboard.writeText(bbcode);
+    alert("BBCode copied to clipboard!");
+  }
+</script>
+
+
+<div class="container" id="warrantReportSection">
+        <div class="card">
+        <h2 class="header">Warrant Report</h2>
+    
+   <div class="form-group">
+            <label for="suspectNameWarrant">Suspect Name</label>
+            <input type="text" id="suspectNameWarrant"placeholder="John Doe">
+        </div>
+   <div class="form-group">
+            <label for="suspectNumberWarrant">Suspect Phone Number</label>
+            <input type="text" id="suspectNumberWarrant">
+        </div>
+   <div class="form-group">
+  <label for="chargesWarrant">Charges</label>
+  <input type="text" id="chargesWarrant" placeholder="GM02 - Battery">
+  <div style="margin-top: 10px;">
+    <button onclick="addWarrantCharge()" style="background-color: green; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;">Add</button>
+    <button onclick="removeWarrantCharge()" style="background-color: red; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-left: 5px;">Remove</button>
+  </div>
+  <ul id="chargesWarrantList" style="margin-top: 10px; list-style-type: disc; padding-left: 20px; color: white;"></ul>
+</div>
+   <div class="form-group">
+  <label for="agentWarrant">Agents/Officers Involved</label>
+  <input type="text" id="agentWarrant" placeholder="Agent III John Doe">
+  <div style="margin-top: 10px;">
+    <button onclick="addWarrantAgent()" style="background-color: green; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;">Add</button>
+    <button onclick="removeWarrantAgent()" style="background-color: red; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-left: 5px;">Remove</button>
+  </div>
+  <ul id="agentWarrantList" style="margin-top: 10px; list-style-type: disc; padding-left: 20px; color: white;"></ul>
+</div>
+<div class="form-group">
+    <label for="warrantDetails">Incident Details</label>
+    <textarea id="warrantDetails" rows="6" style="resize: vertical;"></textarea>
+</div>
+   <div class="form-group">
+            <label for="methodWarrant">Method of Identification</label>
+            <input type="text" id="methodWarrant">
+        </div>
+   <div class="form-group">
+            <label for="proofRPWarrant">Proof of RP</label>
+            <input type="text" id="proofRPWarrant"placeholder="MANDATORY">
+        </div>
+   <div class="form-group">
+  <label for="bodycamWarrant">Bodycam Footage</label>
+  <input type="text" id="bodycamWarrant" placeholder="MANDATORY">
+  <div style="margin-top: 10px;">
+    <button onclick="addWarrantFootage()" style="background-color: green; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;">Add</button>
+    <button onclick="removeWarrantFootage()" style="background-color: red; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-left: 5px;">Remove</button>
+  </div>
+  <ul id="bodycamWarrantList" style="margin-top: 10px; list-style-type: disc; padding-left: 20px; color: white;"></ul>
+</div>
+
+        <div class="form-group">
+            <button class="submit-btn" onclick="generateWarrantBBCode()">Submit and Copy to Clipboard</button>
+        </div>
+
+        <div class="form-group">
+            <label for="bbcodeOutput6">BBCode Output:</label>
+            <textarea id="bbcodeOutput6" rows="10" readonly></textarea>
+        </div>
+
+    </div>
+</div>
+
+
+
+<script>
+  const warrantCharges = [];
+  const warrantAgents = [];
+  const warrantFootage = [];
+
+  function addWarrantCharge() {
+    const input = document.getElementById('chargesWarrant');
+    const value = input.value.trim();
+    if (value) {
+      warrantCharges.push(value);
+      updateWarrantList('chargesWarrantList', warrantCharges);
+      input.value = '';
+    }
+  }
+
+  function removeWarrantCharge() {
+    warrantCharges.pop();
+    updateWarrantList('chargesWarrantList', warrantCharges);
+  }
+
+  function addWarrantAgent() {
+    const input = document.getElementById('agentWarrant');
+    const value = input.value.trim();
+    if (value) {
+      warrantAgents.push(value);
+      updateWarrantList('agentWarrantList', warrantAgents);
+      input.value = '';
+    }
+  }
+
+  function removeWarrantAgent() {
+    warrantAgents.pop();
+    updateWarrantList('agentWarrantList', warrantAgents);
+  }
+
+  function addWarrantFootage() {
+    const input = document.getElementById('bodycamWarrant');
+    const value = input.value.trim();
+    if (value) {
+      warrantFootage.push(value);
+      updateWarrantList('bodycamWarrantList', warrantFootage);
+      input.value = '';
+    }
+  }
+
+  function removeWarrantFootage() {
+    warrantFootage.pop();
+    updateWarrantList('bodycamWarrantList', warrantFootage);
+  }
+
+  function updateWarrantList(listId, items) {
+    const list = document.getElementById(listId);
+    list.innerHTML = '';
+    items.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      list.appendChild(li);
+    });
+  }
+</script>
+<style>
+  .card {
+    background-color: #000000;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 700px;
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  #warrantReportSection .card {
+    width: 800px;
+    max-width: 90%;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  input, textarea {
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  .submit-btn {
+    background-color: #dbb165;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .submit-btn:hover {
+    background-color: #bb9752;
+  }
+
+  #bbcodeOutput {
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-family: monospace;
+  }
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: white; /* maroon */
+}
+
+</style>
+<script>
+    function generateWarrantBBCode() {
+        const suspectNameWarrant = $('#suspectNameWarrant').val();
+        const suspectNumberWarrant = $('#suspectNumberWarrant').val();
+        const warrantDetails = $('#warrantDetails').val();
+        const methodWarrant = $('#methodWarrant').val();
+        const proofRPWarrant = $('#proofRPWarrant').val();
+
+        // Convert arrays to BBCode [*] format
+        const chargesList = warrantCharges.map(c => `[*] ${c}`).join('\n');
+        const agentsList = warrantAgents.map(a => `[*] ${a}`).join('\n');
+        const footageList = warrantFootage.map(f => `[*] ${f}`).join('\n');
+
+        const bbcode = `
+[img]https://i.imgur.com/cz5ry8N.png[/img]
+[divbox=#dbd3d3]
+[divbox=#4c0606][b][color=white]Suspect Details[/color][/b][/divbox]
+[divbox=white]
+[b]Full Name:[/b] ${suspectNameWarrant}
+[b]Phone Number:[/b] ${suspectNumberWarrant}
+
+[b]Charges:[/b] 
+[list]
+${chargesList}
+[/list]
+[/divbox]
+
+[divbox=#4c0606][b][color=white]Incident Narrative[/color][/b][/divbox]
+[divbox=white]
+[b]Agents/Officers Involved:[/b] 
+[list]
+${agentsList}
+[/list]
+
+[b]Explain what happened, sufficient detail must be given to justify the placed charges, and videos could be provided. Include location, time of date etc:[/b]
+${warrantDetails}
+
+[b]Method of Identification:[/b]
+${methodWarrant}
+[/divbox]
+
+[divbox=#4c0606][b][color=white]Evidence Details[/color][/b][/divbox]
+[divbox=white]
+[b]Document the possessions confiscated from the charged suspect.[/b]
+[size=85]Possessions are to be documented individually, examples of documented illegal possessions are "Pistol .50" or "12 grams of Cocaine". Legal possessions that can be categorized may be grouped, eg. "Clothing" to describe all clothing items.[/size]
+
+[spoiler=Bodycam Footage]
+[spoiler=((Proof of RP))]
+((Include Proof of RP, if you have no recordings use /do immediately while the information is fresh. Then screenshot and submit it below))
+${proofRPWarrant}
+[/spoiler]
+[list]
+${footageList}
+[/list]
+[/spoiler]
+[/divbox]
+[/divbox]
+[img]https://i.imgur.com/Fttvrwf.png[/img]`;
+
+        $('#bbcodeOutput6').val(bbcode).select();
+        document.execCommand('copy');
+        alert("BBCode copied to clipboard!");
+    }
+</script>
+
+
+
+
+
+    <!-- Command Team -->
+    <div class="container" id="commandTeamSection">
+        <div class="command-team-container">
+            <div class="command-team-member">
+                <img src="https://i.imgur.com/Bb2M8SG.png" class="team-member-img">
+                <div class="team-member-details">
+                    <h3>Name: Lester Conway</h3>
+                    <p>Rank: Security Director</p>
+                    <p>Oversees all operations and ensures smooth functioning of the bureau.</p>
+                </div>
+            </div>
+            <div class="command-team-member">
+                <img src="https://i.imgur.com/9WESpAu.png" class="team-member-img">
+                <div class="team-member-details">
+                    <h3>Name: Tristan Murphy</h3>
+                    <p>Rank: Security Deputy Director</p>
+                    <p>Head of Recruitment and Training. Takes charge in the absence of the director.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supervisor Team -->
+<!-- Supervisor Team Section -->
+<div class="container" id="supervisorTeamSection" class="hidden">
+<h2>Coming soon...</h2>
+</body>
+</html>

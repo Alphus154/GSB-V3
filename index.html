@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <style>
+    body {
+      background-color: #000000;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Background logo */
+    .background-logo {
+      position: absolute;
+      top: 50%;
+      left: 75%; /* Move logo 3/4 across the page */
+      transform: translate(-50%, -50%);
+      opacity: 0.3; /* faded effect */
+      max-width: 80%;
+      max-height: 80%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Login container */
+    .login-container {
+      background: #660000;
+      padding: 20px 60px;
+      border-radius: 12px;
+      box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      width: 300px;
+    }
+
+    .login-container h2 {
+      margin-bottom: 20px;
+      color: white;
+    }
+
+    .login-container input {
+      width: 100%;
+      padding: 12px 10px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+
+    .login-container button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      background-color: #dbb165;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .login-container button:hover {
+      background-color: #bb9752;
+    }
+
+    .error-message {
+      color: red;
+      margin-top: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background logo -->
+  <img class="background-logo" src="https://i.imgur.com/rXC9fsj.png" alt="Background Logo">
+
+  <div class="login-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit">Log In</button>
+      <div class="error-message" id="error-message">Incorrect username or password.</div>
+    </form>
+  </div>
+
+  <script>
+  const loginForm = document.getElementById('loginForm');
+  const errorMessage = document.getElementById('error-message');
+
+  loginForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    // Your correct username and password
+    const correctUsername = "admin";
+    const correctPassword = "1234";
+
+    if (username === correctUsername && password === correctPassword) {
+      window.location.href = "main.html";  // <-- updated file name here
+    } else {
+      errorMessage.style.display = "block";
+    }
+  });
+</script>
+
+
+</body>
+</html>
