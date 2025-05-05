@@ -203,6 +203,12 @@
         <button>Training Tracker</button>
     </a>
 
+	   <h2>Bureau Creation</h2>
+	<button onclick="showSection('usefulCert')">Useful Resources</button>
+    <button onclick="showSection('handbookSection')">Handbook Section</button>
+	<button onclick="showSection('certSection')">Certification Information</button>
+
+
     <h2>Points of Contact</h2>
     <button onclick="showSection('commandTeamSection')">Command Team</button>
     <button onclick="showSection('supervisorTeamSection')">Supervisor Team</button>
@@ -1913,9 +1919,426 @@ ${footageList}
     }
 </script>
 
+   <div class="container" id="handbookSection">
+        <div class="card">
+        <h2 class="header">Handbook Section</h2>
+		<div class="form-group">
+                <label for="banner">Main Section Banner</label>
+                <input type="text" id="banner" placeholder="Image link of main banner, can be made on https://cobbtools.co.uk/sasg/tool">
+            </div>
+            <div class="form-group">
+                <label for="sectionBanner">Section Banner</label>
+                <input type="text" id="sectionBanner" placeholder="Title for banner eg, Arrest & Detainment Protocols">
+            </div>
+			      <div class="form-group">
+            <label for="sectionText">Section Text</label>
+            <textarea id="sectionText" placeholder="Enter Section Text Here" rows="5"></textarea>
+        </div>
+		<button type="button" class="add-section-btn" onclick="addSection()">Add Section</button>
+        <button type="button" class="remove-section-btn" onclick="removeSection()">Remove Section</button>
+
+<div id="dynamicSections"></div>
+       <div class="form-group">
+            <button class="submit-btn" onclick="generateHandbookBBCode()">Submit and Copy to Clipboard</button>
+        </div>
+
+        <div class="form-group">
+            <label for="bbcodeOutput7">BBCode Output:</label>
+            <textarea id="bbcodeOutput7" rows="10" readonly></textarea>
+        </div>
+    </div>
+</div>
+
+		<style>
+		
+		
+  .card {
+    background-color: #000000;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 700px;
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  #handbookSection .card {
+    width: 800px;
+    max-width: 90%;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  input, textarea {
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+   .header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: white;
+  }
+  .submit-btn {
+    background-color: #dbb165;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .submit-btn:hover {
+    background-color: #bb9752;
+  }
+
+  #bbcodeOutput {
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-family: monospace;
+  }
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: white; /* maroon */
+}
+.add-section-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.add-section-btn:hover {
+    background-color: #218838;
+}
+.remove-section-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.remove-section-btn:hover {
+    background-color: #c82333;
+}
+</style>
+<script>
+function generateHandbookBBCode() {
+    const banner = $('#banner').val();
+    const baseSectionBanner = $('#sectionBanner').val();
+    const baseSectionText = $('#sectionText').val();
+
+    let bbcode = `[divbox=#dbd3d3]
+[img]${banner}[/img]
+
+[divbox=#4c0606][b][color=white]${baseSectionBanner}[/color][/b][/divbox]
+[divbox=white]
+${baseSectionText}
+[/divbox]
+`;
+
+    // Loop through dynamic sections
+    const dynamicSections = document.getElementById('dynamicSections').children;
+
+    for (let i = 0; i < dynamicSections.length; i++) {
+        const bannerInput = dynamicSections[i].querySelector(`input`);
+        const textArea = dynamicSections[i].querySelector(`textarea`);
+
+        const bannerVal = bannerInput ? bannerInput.value : '';
+        const textVal = textArea ? textArea.value : '';
+
+        if (bannerVal || textVal) {
+            bbcode += `
+[divbox=#4c0606][b][color=white]${bannerVal}[/color][/b][/divbox]
+[divbox=white]
+${textVal}
+[/divbox]
+`;
+        }
+    }
+
+    bbcode += `[img]https://i.imgur.com/Fttvrwf.png[/img]`;
+
+    // Output and copy
+    const output = document.getElementById('bbcodeOutput7');
+    output.value = bbcode.trim();
+    output.select();
+    document.execCommand('copy');
+
+    alert("BBCode copied to clipboard!");
+}
+</script>
+
+		
+		
+		
+<script>
+    let sectionCount = 1;
+
+    function addSection() {
+        const container = document.getElementById('dynamicSections');
+
+        const newSection = document.createElement('div');
+        newSection.classList.add('form-group');
+        newSection.innerHTML = `
+            <label for="sectionOne${sectionCount}">Section Banner</label>
+            <input type="text" id="sectionOne${sectionCount}" placeholder="Title for banner eg, Arrest & Detainment Protocols">
+            <label for="sectionText${sectionCount}">Section Text</label>
+            <textarea id="sectionText${sectionCount}" placeholder="Enter Section Text Here" rows="5"></textarea>
+        `;
+
+        container.appendChild(newSection);
+        sectionCount++;
+    }
+	function removeSection() {
+    const container = document.getElementById('dynamicSections');
+    if (container.lastElementChild) {
+        container.removeChild(container.lastElementChild);
+        sectionCount = Math.max(1, sectionCount - 1); // Don't go below 1
+    }
+}
+
+</script>
+
+  <div class="container" id="certSection">
+        <div class="card">
+        <h2 class="header">Certification Information</h2>
+  <div class="form-group">
+            <label for="mainWeapon">Main Banner Image</label>
+            <input type="text" id="mainWeapon"placeholder="Can be made with Cobbtools, website in useful resources tab">
+        </div>
+<div class="form-group">
+    <label for="overviewWeapon">Overview</label>
+    <textarea id="overviewWeapon" placeholder="Give information about the certification and what it includes" rows="5"></textarea>
+</div>
+
+<div class="form-group">
+    <label for="imageWeapon">Image of Certification</label>
+    <input type="text" id="imageWeapon" placeholder="A direct image link to the certification being proposed, e.g., picture of a weapon">
+</div>
+
+<div class="form-group">
+    <label for="aboutWeapon">About the Certification</label>
+    <textarea id="aboutWeapon" placeholder="Give information about the certification, e.g., ammo type, rounds that can be carried, amount of power" rows="5"></textarea>
+</div>
+
+<div class="form-group">
+    <label for="guidelinesWeapon">Guidelines</label>
+    <textarea id="guidelinesWeapon" placeholder="Give information on guidelines, e.g., when it can be used/when it can't be used" rows="5"></textarea>
+</div>
+
+<div class="form-group">
+    <label for="storageWeapon">Storage</label>
+    <textarea id="storageWeapon" placeholder="Give information about where it can be stored, e.g., car gun rack" rows="5"></textarea>
+</div>
+       <div class="form-group">
+            <button class="submit-btn" onclick="generateCertBBCode()">Submit and Copy to Clipboard</button>
+        </div>
+
+        <div class="form-group">
+            <label for="bbcodeOutput8">BBCode Output:</label>
+            <textarea id="bbcodeOutput8" rows="10" readonly></textarea>
+        </div>
+    </div>
+</div>
+<style>
+  .card {
+    background-color: #000000;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 700px;
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  #certSection .card {
+    width: 800px;
+    max-width: 90%;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  input, textarea {
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+   .header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: white;
+  }
+  .submit-btn {
+    background-color: #dbb165;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .submit-btn:hover {
+    background-color: #bb9752;
+  }
+
+  #bbcodeOutput {
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-family: monospace;
+  }
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: white; /* maroon */
+}
+.add-section-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.add-section-btn:hover {
+    background-color: #218838;
+}
+.remove-section-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.remove-section-btn:hover {
+    background-color: #c82333;
+}
+</style>
+<script>
+function generateCertBBCode() {
+    const mainWeapon = $('#mainWeapon').val();
+    const overviewWeapon = $('#overviewWeapon').val();
+    const imageWeapon = $('#imageWeapon').val();
+	const aboutWeapon = $('#aboutWeapon').val();
+    const guidelinesWeapon = $('#guidelinesWeapon').val();
+    const storageWeapon = $('#storageWeapon').val();
+	
+	        const bbcode = `
+[img]${mainWeapon}[/img]
+[divbox=#dbd3d3]
+[divbox=#671e1e][b][color=white]Overview[/color][/b][/divbox]
+[divbox=white][list=none]${overviewWeapon}
+[hr]
+[float=left][fimg=400,150]${imageWeapon}[/fimg][/float]${aboutWeapon}[/list][/divbox]
+
+[divbox=#671e1e][b][color=white]Guidelines[/color][/b][/divbox]
+[divbox=white][list=none]${guidelinesWeapon}[/list][/list][/divbox]
+
+[divbox=#671e1e][b][color=white]Storage[/color][/b][/divbox]
+[divbox=white][list=none]${storageWeapon}[/list][/divbox]`;
+        
+		$('#bbcodeOutput8').val(bbcode).select();
+        document.execCommand('copy');
+        alert("BBCode copied to clipboard!");
+    }
+</script>
 
 
+ <div class="container" id="usefulCert">
+  <div class="card">
+    <h2 class="header">Useful Resources:</h2>
+<p style="color: white;">Mpaches BBCode Guide: https://gov.eclipse-rp.net/viewtopic.php?p=748553#p748553</p>
+<p style="color: white;">Complete Certification: https://gov.eclipse-rp.net/viewtopic.php?t=170474</p>
+<p style="color: white;">Complete Handbook Section: https://gov.eclipse-rp.net/viewtopic.php?t=181747</p>
+<p style="color: white;">Cobb Tools (Use for main banners): https://cobbtools.co.uk/sasg/tool</p>
+  </div>
+</div>
 
+
+<style>
+  .card {
+    background-color: #000000;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 700px;
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  #usefulCert .card {
+    width: 800px;
+    max-width: 90%;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  input, textarea {
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+   .header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: white;
+  }
+  </style>
 
     <!-- Command Team -->
     <div class="container" id="commandTeamSection">
