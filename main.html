@@ -202,6 +202,15 @@
     <a href="https://docs.google.com/spreadsheets/d/1RYTXnq3Qj8gidOuuJOix4-EsslCuYSrUODSW3VM8RI8/edit?usp=sharing" target="_blank">
         <button>Training Tracker</button>
     </a>
+	
+		   <h2>Recruitment</h2>
+	<button onclick="showSection('interviewTime')">Interview Scheduled</button>
+	<button onclick="showSection('jobOffer')">Employment Offer</button>
+	<button onclick="showSection('jobDenied')">Application Denied</button>
+	   <h2>Training</h2>
+    <button onclick="showSection('theoryPass')">Certification - Theory Pass</button>
+	<button onclick="showSection('practicalPass')">Certification - Practical Pass</button>
+	<button onclick="showSection('certFail')">Certification - Fail</button>
 
 	   <h2>Bureau Creation</h2>
 	<button onclick="showSection('usefulCert')">Useful Resources</button>
@@ -2282,6 +2291,1025 @@ function generateCertBBCode() {
 [divbox=white][list=none]${storageWeapon}[/list][/divbox]`;
         
 		$('#bbcodeOutput8').val(bbcode).select();
+        document.execCommand('copy');
+        alert("BBCode copied to clipboard!");
+    }
+</script>
+
+<div class="container" id="interviewTime">
+        <div class="card">
+        <h2 class="header">Interview Scheduled</h2>
+  <div class="form-group">
+            <label for="interName">Their Name</label>
+            <input type="text" id="interName"placeholder="Mr/Ms Doe">
+        </div>
+  <div class="form-group">
+            <label for="interDate">Date</label>
+            <input type="text" id="interDate"placeholder="Tuesday the 3rd of May">
+        </div>
+  <div class="form-group">
+            <label for="interTime">Time</label>
+            <input type="text" id="interTime"placeholder="23:00 (Give time in UTC!!!!!!)">
+        </div>
+  <div class="form-group">
+            <label for="interSignature">Signature Image</label>
+            <input type="text" id="interSignature"placeholder="Signature image here">
+        </div>
+  <div class="form-group">
+            <label for="interRank">Your Rank</label>
+            <input type="text" id="interRank"placeholder="Senior Agent">
+        </div>
+       <div class="form-group">
+            <button class="submit-btn" onclick="generateInterBBCode()">Submit and Copy to Clipboard</button>
+        </div>
+
+        <div class="form-group">
+            <label for="bbcodeOutput9">BBCode Output:</label>
+            <textarea id="bbcodeOutput9" rows="10" readonly></textarea>
+        </div>
+    </div>
+</div>
+		<style>
+  .card {
+    background-color: #000000;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 700px;
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  #interviewTime .card {
+    width: 800px;
+    max-width: 90%;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  input, textarea {
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+   .header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: white;
+  }
+  .submit-btn {
+    background-color: #dbb165;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .submit-btn:hover {
+    background-color: #bb9752;
+  }
+
+  #bbcodeOutput {
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-family: monospace;
+  }
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: white; /* maroon */
+}
+.add-section-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.add-section-btn:hover {
+    background-color: #218838;
+}
+.remove-section-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.remove-section-btn:hover {
+    background-color: #c82333;
+}
+</style>
+<script>
+function generateInterBBCode() {
+    const interName = $('#interName').val();
+    const interDate = $('#interDate').val();
+    const interTime = $('#interTime').val();
+	const interSignature = $('#interSignature').val();
+    const interRank = $('#interRank').val();
+	
+	        const bbcode = `
+[img]https://i.imgur.com/Fttvrwf.png[/img][divbox=white]
+[img]https://i.imgur.com/1dhxhIu.png[/img][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
+[size=150]Government Security Bureau[/size]
+[size=110][b]Recruitment & Training Division[/size][/b]
+[size=125]Interview Scheduled[/size][/font][/right][/aligntable]
+[hr]
+[list=none]
+
+[b]Dear ${interName},[/b] 
+
+After checking on our available time slots and considering the time convenient for you, we have decided to book your interview on the following schedule below:
+
+[b][u]Interview Schedule[/u][/b]
+${interDate} | ${interTime} ((UTC))
+
+Please come dressed for an interview and make sure to bring a photo ID with you. On the day of your interview, please utilize the side or back parking at the City Hall as the front parking is strictly reserved for Government vehicles.
+
+
+[/list]
+
+[hr][/hr][list=none]
+
+
+Sincerely, 
+[img]${interSignature}[/img]
+[b]San Andreas State Government[/b]
+[i]${interRank}
+Rockford Hills City Hall
+Carcer Way, Los Santos.[/i]
+
+[/divbox]
+[img]https://i.imgur.com/Fttvrwf.png[/img]`;
+        
+		$('#bbcodeOutput9').val(bbcode).select();
+        document.execCommand('copy');
+        alert("BBCode copied to clipboard!");
+    }
+</script>
+
+ <div class="container" id="jobOffer">
+        <div class="card">
+        <h2 class="header">Interview Scheduled</h2>
+  <div class="form-group">
+            <label for="employName">Their Name</label>
+            <input type="text" id="employName"placeholder="Mr/Ms Doe">
+        </div>
+  <div class="form-group">
+            <label for="offerRank">Offered Rank</label>
+            <input type="text" id="offerRank"placeholder="Junior Agent">
+        </div>
+  <div class="form-group">
+            <label for="employSignature">Signature Image</label>
+            <input type="text" id="employSignature"placeholder="Signature image here">
+        </div>
+  <div class="form-group">
+            <label for="employRank">Your Rank</label>
+            <input type="text" id="employRank"placeholder="Senior Agent">
+        </div>
+       <div class="form-group">
+            <button class="submit-btn" onclick="generateEmployBBCode()">Submit and Copy to Clipboard</button>
+        </div>
+
+        <div class="form-group">
+            <label for="bbcodeOutput10">BBCode Output:</label>
+            <textarea id="bbcodeOutput10" rows="10" readonly></textarea>
+        </div>
+    </div>
+</div>
+		<style>
+  .card {
+    background-color: #000000;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 700px;
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  #jobOffer .card {
+    width: 800px;
+    max-width: 90%;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  input, textarea {
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+   .header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: white;
+  }
+  .submit-btn {
+    background-color: #dbb165;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .submit-btn:hover {
+    background-color: #bb9752;
+  }
+
+  #bbcodeOutput {
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-family: monospace;
+  }
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: white; /* maroon */
+}
+.add-section-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.add-section-btn:hover {
+    background-color: #218838;
+}
+.remove-section-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.remove-section-btn:hover {
+    background-color: #c82333;
+}
+</style>
+<script>
+function generateEmployBBCode() {
+    const employName = $('#employName').val();
+    const offerRank = $('#offerRank').val();
+	const employSignature = $('#employSignature').val();
+    const employRank = $('#employRank').val();
+	
+	        const bbcode = `
+[img]https://i.imgur.com/Fttvrwf.png[/img][divbox=white]
+[img]https://i.imgur.com/1dhxhIu.png[/img][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
+[size=150]San Andreas State Government[/size]
+[size=125]Administration Bureau[/size][/b]
+[size=110][b]Human Resources Division[/size][/b]
+
+[size=125]Application Decision[/size][/font][/right][/aligntable]
+[hr]
+[list=none]
+
+[b]${employName},[/b]
+
+Thank you for applying to the San Andreas State Government. It is with great pleasure that with your interview and extensive background check completed, a decision has been made to [b][color=green]ACCEPT[/color][/b] your application and you are hereby being offered a position with the State Government:
+
+     [b]Bureau[/b]: Government Security Bureau
+     [b]Rank[/b]: ${offerRank}
+
+[b][u]Acceptance Statement[/u][/b]:
+If this offer is satisfactory, please reply back by saying "I accept" below, a Government Representative will then be in contact to start the recruitment. If this is not acceptable, simply state "I do not accept". If you choose to accept the offer please come into City Hall when your next available to complete your onboarding.
+[/list]
+
+[hr][/hr][list=none]
+Sincerely, 
+[img]${employSignature}[/img]
+[size=100][b]${employRank} | Government Security Bureau[/b][/size]
+[color=#B38F00][size=100][b]San Andreas State Government[/b][/size][/color]
+[i]Rockford Hills City Hall
+Carcer Way, Los Santos.[/i]
+
+[/divbox]
+[img]https://i.imgur.com/Fttvrwf.png[/img]`;
+        
+		$('#bbcodeOutput10').val(bbcode).select();
+        document.execCommand('copy');
+        alert("BBCode copied to clipboard!");
+    }
+</script>
+
+ 
+<div class="container" id="jobDenied">
+        <div class="card">
+        <h2 class="header">Application Denied</h2>
+  <div class="form-group">
+            <label for="deniedName">Their Name</label>
+            <input type="text" id="deniedName"placeholder="Mr/Ms Doe">
+        </div>
+  <div class="form-group">
+            <label for="deniedReason">Denial Reason</label>
+            <input type="text" id="deniedReason"placeholder="Lack of effort given in application">
+        </div>
+		 <div class="form-group">
+            <label for="deniedSignature">Signature Image</label>
+            <input type="text" id="deniedSignature"placeholder="Signature image link">
+        </div>
+		 <div class="form-group">
+            <label for="deniedRank">Your Rank</label>
+            <input type="text" id="deniedRank"placeholder="Agent II">
+        </div>
+				     <div class="form-group">
+            <button class="submit-btn" onclick="generateDeniedBBCode()">Submit and Copy to Clipboard</button>
+        </div>
+
+        <div class="form-group">
+            <label for="bbcodeOutput11">BBCode Output:</label>
+            <textarea id="bbcodeOutput11" rows="10" readonly></textarea>
+        </div>
+    </div>
+</div>
+<style>
+  .card {
+    background-color: #000000;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 700px;
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  #jobDenied .card {
+    width: 800px;
+    max-width: 90%;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  input, textarea {
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+   .header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: white;
+  }
+  .submit-btn {
+    background-color: #dbb165;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .submit-btn:hover {
+    background-color: #bb9752;
+  }
+
+  #bbcodeOutput {
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-family: monospace;
+  }
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: white; /* maroon */
+}
+.add-section-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.add-section-btn:hover {
+    background-color: #218838;
+}
+.remove-section-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.remove-section-btn:hover {
+    background-color: #c82333;
+}
+</style>
+
+<script>
+function generateDeniedBBCode() {
+    const deniedName = $('#deniedName').val();
+    const deniedReason = $('#deniedReason').val();
+	const deniedSignature = $('#deniedSignature').val();
+    const deniedRank = $('#deniedRank').val();
+	
+	        const bbcode = `
+[img]https://i.imgur.com/Fttvrwf.png[/img][divbox=white]
+[img]https://i.imgur.com/1dhxhIu.png[/img][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
+[size=150]Government Security Bureau (GSB)[/size]
+[size=110][b]Recruitment & Training Division[/size][/b]
+[size=125]Application Decision[/size][/font][/right][/aligntable]
+[hr]
+[list=none]
+
+[b]Dear ${deniedName},[/b] 
+
+Thank you for applying to the San Andreas State Government. Your application has been [b][color=red]DENIED[/color][/b] as of this time due to the following reason(s):
+[list]
+[*]${deniedReason}
+[/list]
+
+Once again thank you for showing interest in applying for the San Andreas State Government. You may reapply in the next recruitment drive.
+[/list]
+
+[hr][/hr][list=none]
+Sincerely, 
+[img]${deniedSignature}[/img]
+[size=100][b]${deniedRank} | Government Security Bureau[/b][/size]
+[color=#B38F00][size=100][b]San Andreas State Government[/b][/size][/color]
+[i]Rockford Hills City Hall
+Carcer Way, Los Santos.[/i]
+
+[/divbox]
+[img]https://i.imgur.com/Fttvrwf.png[/img]`;
+		
+		$('#bbcodeOutput11').val(bbcode).select();
+        document.execCommand('copy');
+        alert("BBCode copied to clipboard!");
+    }
+</script>
+
+<div class="container" id="theoryPass">
+        <div class="card">
+        <h2 class="header">Certification Theory Pass</h2>
+  <div class="form-group">
+            <label for="theoryName">Their Name</label>
+            <input type="text" id="theoryName"placeholder="Agent II John Doe">
+        </div>
+		 <div class="form-group">
+            <label for="theorySignature">Signature Image</label>
+            <input type="text" id="theorySignature"placeholder="Signature Image Here">
+        </div>
+		 <div class="form-group">
+            <label for="theoryYourName">Your Name</label>
+            <input type="text" id="theoryYourName"placeholder="John Doe">
+        </div>
+		 <div class="form-group">
+            <label for="theoryRank">Your Rank</label>
+            <input type="text" id="theoryRank"placeholder="Agent II John Doe">
+        </div>
+						     <div class="form-group">
+            <button class="submit-btn" onclick="generateTheoryPassBBCode()">Submit and Copy to Clipboard</button>
+        </div>
+
+        <div class="form-group">
+            <label for="bbcodeOutput12">BBCode Output:</label>
+            <textarea id="bbcodeOutput12" rows="10" readonly></textarea>
+        </div>
+    </div>
+</div>
+		<style>
+  .card {
+    background-color: #000000;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 700px;
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  #theoryPass .card {
+    width: 800px;
+    max-width: 90%;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  input, textarea {
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+   .header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: white;
+  }
+  .submit-btn {
+    background-color: #dbb165;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .submit-btn:hover {
+    background-color: #bb9752;
+  }
+
+  #bbcodeOutput {
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-family: monospace;
+  }
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: white; /* maroon */
+}
+.add-section-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.add-section-btn:hover {
+    background-color: #218838;
+}
+.remove-section-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.remove-section-btn:hover {
+    background-color: #c82333;
+}
+</style>
+<script>
+function generateTheoryPassBBCode() {
+    const theoryName = $('#theoryName').val();
+    const theorySignature = $('#theorySignature').val();
+	const theoryYourName = $('#theoryYourName').val();
+    const theoryRank = $('#theoryRank').val();
+	
+	        const bbcode = `
+ [img]https://i.imgur.com/Lp6dMi4.png[/img]
+[divbox=#E5E4E2]
+[divbox=white]
+[img]https://i.imgur.com/1dhxhIu.png[/img][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
+[size=130]SAN ANDREAS STATE GOVERNMENT[/size]
+[size=115]Government Security Bureau[/size][/b]
+[size=115][i][color=#00FF00]THEORY PASSED[/color][/i][/size][/font][/right][/aligntable]
+[hr]
+[list=none]
+
+[b]${theoryName},[/b]
+
+After reviewing your application we have decided to [color=#00FF00][b]accept[/b][/color] your certification. Please find a trainer to conduct a practical session demonstrating the usage of the weapon.
+
+[/list]
+[hr][/hr][list=none]
+
+Sincerely,
+ 
+[img]${theorySignature}[/img]
+[size=105]${theoryYourName},[/size]
+[size=100][b]${theoryRank} | Government Security Bureau[/b][/size]
+[color=#B38F00][size=100][b]San Andreas State Government[/b][/size][/color]
+[i]Rockford Hills City Hall
+Carcer Way, Los Santos.[/i]
+
+[/divbox]
+[/divbox]
+[img]https://i.imgur.com/Fttvrwf.png[/img]`;
+		
+		$('#bbcodeOutput12').val(bbcode).select();
+        document.execCommand('copy');
+        alert("BBCode copied to clipboard!");
+    }
+</script>
+
+<div class="container" id="practicalPass">
+        <div class="card">
+        <h2 class="header">Certification Practical Pass</h2>
+  <div class="form-group">
+            <label for="practicalName">Their Name</label>
+            <input type="text" id="practicalName"placeholder="Agent II John Doe">
+        </div>
+		 <div class="form-group">
+            <label for="practicalSignature">Signature Image</label>
+            <input type="text" id="practicalSignature"placeholder="Signature Image Here">
+        </div>
+		 <div class="form-group">
+            <label for="practicalYourName">Your Name</label>
+            <input type="text" id="practicalYourName"placeholder="John Doe">
+        </div>
+		 <div class="form-group">
+            <label for="practicalRank">Your Rank</label>
+            <input type="text" id="practicalRank"placeholder="Agent II John Doe">
+        </div>
+						     <div class="form-group">
+            <button class="submit-btn" onclick="generatePracticalPassBBCode()">Submit and Copy to Clipboard</button>
+        </div>
+
+        <div class="form-group">
+            <label for="bbcodeOutput13">BBCode Output:</label>
+            <textarea id="bbcodeOutput13" rows="10" readonly></textarea>
+        </div>
+    </div>
+</div>
+		<style>
+  .card {
+    background-color: #000000;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 700px;
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  #practicalPass .card {
+    width: 800px;
+    max-width: 90%;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  input, textarea {
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+   .header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: white;
+  }
+  .submit-btn {
+    background-color: #dbb165;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .submit-btn:hover {
+    background-color: #bb9752;
+  }
+
+  #bbcodeOutput {
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-family: monospace;
+  }
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: white; /* maroon */
+}
+.add-section-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.add-section-btn:hover {
+    background-color: #218838;
+}
+.remove-section-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.remove-section-btn:hover {
+    background-color: #c82333;
+}
+</style>
+<script>
+function generatePracticalPassBBCode() {
+    const practicalName = $('#practicalName').val();
+    const practicalSignature = $('#practicalSignature').val();
+	const practicalYourName = $('#practicalYourName').val();
+    const practicalRank = $('#practicalRank').val();
+	
+	        const bbcode = `
+[img]https://i.imgur.com/Lp6dMi4.png[/img]
+[divbox=#E5E4E2]
+[divbox=white]
+[img]https://i.imgur.com/1dhxhIu.png[/img][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
+[size=130]SAN ANDREAS STATE GOVERNMENT[/size]
+[size=115]Government Security Bureau[/size][/b]
+[size=115][i][color=#00FF00]PRACTICAL PASSED[/color][/i][/size][/font][/right][/aligntable]
+[hr]
+[list=none]
+
+[b]${practicalName},[/b]
+
+Following your practical session, we have decided to [color=#00FF00][b]accept[/b][/color] your certification. You may now deploy the weapon following the guidelines outlined.
+
+[/list]
+[hr][/hr][list=none]
+
+Sincerely,
+ 
+[img]${practicalSignature}[/img]
+[size=105]${practicalYourName},[/size]
+[size=100][b]${practicalRank} | Government Security Bureau[/b][/size]
+[color=#B38F00][size=100][b]San Andreas State Government[/b][/size][/color]
+[i]Rockford Hills City Hall
+Carcer Way, Los Santos.[/i]
+
+[/divbox]
+[/divbox]
+[img]https://i.imgur.com/Lp6dMi4.png[/img]`;
+		
+		$('#bbcodeOutput13').val(bbcode).select();
+        document.execCommand('copy');
+        alert("BBCode copied to clipboard!");
+    }
+</script>
+<div class="container" id="certFail">
+        <div class="card">
+        <h2 class="header">Certification Denied</h2>
+  <div class="form-group">
+            <label for="deniedName">Their Name</label>
+            <input type="text" id="deniedName"placeholder="Agent II John Doe">
+        </div>
+  <div class="form-group">
+            <label for="certDeniedReason">Denial Reason</label>
+            <input type="text" id="certDeniedReason"placeholder="Lack of Effort made in the application">
+        </div>
+		 <div class="form-group">
+            <label for="deniedSignature">Signature Image</label>
+            <input type="text" id="deniedSignature"placeholder="Signature Image Here">
+        </div>
+		 <div class="form-group">
+            <label for="deniedYourName">Your Name</label>
+            <input type="text" id="deniedYourName"placeholder="John Doe">
+        </div>
+		 <div class="form-group">
+            <label for="deniedRank">Your Rank</label>
+            <input type="text" id="deniedRank"placeholder="Agent II John Doe">
+        </div>
+						     <div class="form-group">
+            <button class="submit-btn" onclick="generatePracticalDeniedBBCode()">Submit and Copy to Clipboard</button>
+        </div>
+
+        <div class="form-group">
+            <label for="bbcodeOutput14">BBCode Output:</label>
+            <textarea id="bbcodeOutput14" rows="10" readonly></textarea>
+        </div>
+    </div>
+</div>
+		<style>
+  .card {
+    background-color: #000000;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 700px;
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  #certFail .card {
+    width: 800px;
+    max-width: 90%;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  input, textarea {
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+   .header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: white;
+  }
+  .submit-btn {
+    background-color: #dbb165;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .submit-btn:hover {
+    background-color: #bb9752;
+  }
+
+  #bbcodeOutput {
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-family: monospace;
+  }
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: white; /* maroon */
+}
+.add-section-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.add-section-btn:hover {
+    background-color: #218838;
+}
+.remove-section-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.remove-section-btn:hover {
+    background-color: #c82333;
+}
+</style>
+<script>
+function generatePracticalDeniedBBCode() {
+    const deniedName = $('#deniedName').val();
+	const certDeniedReason = $('#certDeniedReason').val();
+    const deniedSignature = $('#deniedSignature').val();
+	const deniedYourName = $('#deniedYourName').val();
+    const deniedRank = $('#deniedRank').val();
+	
+	        const bbcode = `
+[img]https://i.imgur.com/Lp6dMi4.png[/img]
+[divbox=#E5E4E2]
+[divbox=white]
+[img]https://i.imgur.com/1dhxhIu.png[/img][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
+[size=130]SAN ANDREAS STATE GOVERNMENT[/size]
+[size=115]Government Security Bureau[/size][/b]
+[size=115][i][color=#FF0000]CERTIFICATION FAILED[/color][/i][/size][/font][/right][/aligntable]
+[hr]
+[list=none]
+
+[b]${deniedName},[/b]
+
+Following your application, we have decided to [color=#FF0000][b]deny[/b][/color] your certification for the reasons below:
+
+[list]${certDeniedReason}[/list]
+
+[/list]
+[hr][/hr][list=none]
+
+Sincerely,
+ 
+[img]${deniedSignature}[/img]
+[size=105]${deniedYourName},[/size]
+[size=100][b]${deniedRank} | Government Security Bureau[/b][/size]
+[color=#B38F00][size=100][b]San Andreas State Government[/b][/size][/color]
+[i]Rockford Hills City Hall
+Carcer Way, Los Santos.[/i]
+
+[/divbox]
+[/divbox]
+[img]https://i.imgur.com/Lp6dMi4.png[/img]`;
+		
+		$('#bbcodeOutput14').val(bbcode).select();
         document.execCommand('copy');
         alert("BBCode copied to clipboard!");
     }
