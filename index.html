@@ -86,7 +86,7 @@
   <div class="login-container">
     <h2>Login</h2>
     <form id="loginForm">
-      <input type="text" id="username" placeholder="Username" required>
+      <input type="text" id="username" placeholder="Email" required>
       <input type="password" id="password" placeholder="Password" required>
       <button type="submit">Log In</button>
       <div class="error-message" id="error-message">Incorrect username or password.</div>
@@ -104,8 +104,8 @@
     const password = document.getElementById('password').value;
 
     // Your correct username and password
-    const correctUsername = "admin";
-    const correctPassword = "1234";
+    const correctUsername = "gsb.agent@sagov.com";
+    const correctPassword = "agent5867";
 
     if (username === correctUsername && password === correctPassword) {
       window.location.href = "main.html";  // <-- updated file name here
