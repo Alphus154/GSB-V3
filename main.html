@@ -268,11 +268,11 @@
                 <textarea id="emailText" rows="10" placeholder="Write your email here"></textarea>
             </div>
             <div class="form-group">
-                <button class="submit-btn" onclick="generateBBCode()">Submit and Copy to Clipboard</button>
+                <button class="submit-btn" onclick="generateBBCode0()">Submit and Copy to Clipboard</button>
             </div>
             <div class="form-group">
-                <label for="bbcodeOutput">BBCode Output:</label>
-                <textarea id="bbcodeOutput" rows="10" readonly></textarea>
+                <label for="bbcodeOutput0">BBCode Output:</label>
+                <textarea id="bbcodeOutput0" rows="10" readonly></textarea>
             </div>
         </div>
     </div>
@@ -337,7 +337,7 @@ label {
 
 </style>
 <script>
-    function generateBBCode() {
+    function generateBBCode0() {
         const emailDate = $('#emailDate').val();
         const emailSubject = $('#emailSubject').val();
         const theirName = $('#theirName').val();
@@ -383,7 +383,7 @@ Sincerely,
 [/divbox]
 [img]https://i.imgur.com/Lp6dMi4.png[/img]`;
 
-        $('#bbcodeOutput').val(bbcode).select();
+        $('#bbcodeOutput0').val(bbcode).select();
         document.execCommand('copy');
         alert("BBCode copied to clipboard!");
     }
